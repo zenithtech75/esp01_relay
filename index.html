@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP Relay Control</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial; text-align: center; padding: 40px; }
+    button { padding: 15px 30px; margin: 10px; font-size: 18px; }
+  </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+  <h2>ESP8266 Cloud Relay Control</h2>
+
+  <p>Relay 1: <span id="r1">?</span></p>
+  <button onclick="toggleRelay('Relay1')">Toggle Relay 1</button>
+
+  <p>Relay 2: <span id="r2">?</span></p>
+  <button onclick="toggleRelay('Relay2')">Toggle Relay 2</button>
+
+  <script>
+    // Firebase config (get this from your Firebase Console)
+    const firebaseConfig = {
+      apiKey: "AIzaSyXXXX...",
+      authDomain: "esp01-99f44.firebaseapp.com",
+      databaseURL: "https://esp01-99f44-default-rtdb.firebaseio.com",
+      projectId: "esp01-99f44",
+      storageBucket: "esp01-99f44.appspot.com",
+      messagingSenderId: "xxxx",
+      appId: "1:xxxx:web:xxxx"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function toggleRelay(relay) {
+      db.ref(relay).once('value').then(snap => {
+        const current = snap.val() === "ON" ? "OFF" : "ON";
+        db.ref(relay).set(current);
+      });
+    }
+
+    function updateStatus() {
+      db.ref("Relay1").on('value', snap => {
+        document.getElementById('r1').innerText = snap.val();
+      });
+      db.ref("Relay2").on('value', snap => {
+        document.getElementById('r2').innerText = snap.val();
+      });
+    }
+
+    updateStatus();
+  </script>
+</body>
+</html>
