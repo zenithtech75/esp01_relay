@@ -76,12 +76,12 @@
   function updateStatus() {
     db.ref("Relay1/state").on("value", snap => {
       document.getElementById("s1").innerText =
-        snap.val() === "ON" ? "Activated" : "Deactivated";
+        snap.val() === "ON" ? "Start" : "Stop";
     });
 
     db.ref("Relay2/state").on("value", snap => {
       document.getElementById("s2").innerText =
-        snap.val() === "ON" ? "Activated" : "Deactivated";
+        snap.val() === "ON" ? "Start" : "Stop";
     });
   }
 
